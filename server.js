@@ -1,20 +1,10 @@
-const express = require('express');
-const { connectDB } = require('./db');
-require('dotenv').config();
+const app = require('./app'); // Import the app module
+const { connectDB } = require('./db'); // Ensure this path is correct
+const PORT = process.env.PORT || 5000;
 
-const app = express();
-
-app.use(express.json());
-
-// Connect to the database
+// Connect to the database (if needed)
 connectDB();
 
-// Basic route for testing
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
-
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

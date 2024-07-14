@@ -1,19 +1,43 @@
-// routes/recipeRoutes.js
-const express = require('express'); // Import Express for routing
-const router = express.Router(); // Create a new router instance
-const {
-  getAllRecipes,
-  createRecipe,
-  getRecipeById,
-  updateRecipe,
-  deleteRecipe
-} = require('../controllers/recipeController'); // Import controller functions
+const express = require('express');
+const axios = require('axios');
+const router = express.Router();
 
-// Define routes and associate them with controller functions
-router.get('/recipes', getAllRecipes);       // GET /api/recipes - Retrieve all recipes
-router.post('/recipes', createRecipe);       // POST /api/recipes - Create a new recipe
-router.get('/recipes/:id', getRecipeById);   // GET /api/recipes/:id - Retrieve a recipe by ID
-router.put('/recipes/:id', updateRecipe);    // PUT /api/recipes/:id - Update a recipe by ID
-router.delete('/recipes/:id', deleteRecipe); // DELETE /api/recipes/:id - Delete a recipe by ID
+// Endpoint to fetch a random meal
+router.get('/random-meal', async (req, res) => {
+  try {
+    // Make a request to TheMealDB API for a random meal
+    const response = await axios.get('https://www.themealdb.com/api/json/v1/1/random.php');
+    
+    // Send the API response to the client
+    res.json(response.data);
+  } catch (error) {
+    // Handle errors and send an appropriate response
+    console.error('Error fetching random meal:', error.message);
+    res.status(500).json({ error: 'Failed to fetch random meal' });
+  }
+});
 
-module.exports = router; // Export the router for use in the main app
+// Endpoint to search for meals by ingredient
+router.get('/search-by-ingredient', async (req, res) => {
+  const ingredient = req.query.i; // Get ingredient from query parameter
+
+  if (!ingredient) {
+    return res.status(400).json({ error: 'Ingredient query parameter is required' });
+  }
+
+  try {
+    // Make a request to TheMealDB API to search for meals by ingredient
+    const response = await axios.get('https://www.themealdb.com/api/json/v1/1/filter.php', {
+      params: { i: ingredient }
+    });
+
+    // Send the API response to the client
+    res.json(response.data);
+  } catch (error) {
+    // Handle errors and send an appropriate response
+    console.error('Error searching meals by ingredient:', error.message);
+    res.status(500).json({ error: 'Failed to search meals by ingredient' });
+  }
+});
+
+module.exports = router;
