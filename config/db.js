@@ -1,8 +1,23 @@
-const { Pool } = require('pg'); // Import the Pool class from 'pg'
+// Import necessary modules
+const fetch = require('node-fetch'); // For making HTTP requests
+const { Pool } = require('pg'); // PostgreSQL client
 require('dotenv').config(); // Load environment variables
 
+// Function to fetch recipes from an API
+const fetchRecipes = async (searchTerm = '') => {
+  try {
+    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching recipes:', error);
+    throw error; // Rethrow the error for handling elsewhere if needed
+  }
+};
+
+// PostgreSQL database connection setup
 const pool = new Pool({
-  user: process.env.DB_USER, // Ensure these environment variables are correctly set in your .env file
+  user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
@@ -11,12 +26,15 @@ const pool = new Pool({
 
 const connectDB = async () => {
   try {
-    await pool.connect(); // Connect to the PostgreSQL database
+    await pool.connect();
     console.log('PostgreSQL connected');
   } catch (err) {
     console.error('Error connecting to PostgreSQL:', err.message);
-    process.exit(1); // Exit the process with failure code
+    process.exit(1);
   }
 };
 
-module.exports = { pool, connectDB };
+// Export both the fetchRecipes function and the PostgreSQL pool with connectDB function
+module.exports = { fetchRecipes, pool, connectDB };
+
+
