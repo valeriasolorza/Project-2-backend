@@ -1,6 +1,8 @@
 const app = require('./app'); // Import the app module
-const { connectDB } = require('./db'); // Ensure this path is correct
-const PORT = process.env.PORT || 5000;
+const { connectDB } = require('./config/db'); // Update the path to point to the config folder
+require('dotenv').config();
+
+const PORT = process.env.PORT || 3000;
 
 // Connect to the database (if needed)
 connectDB();
