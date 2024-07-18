@@ -7,40 +7,26 @@ const {
   getRecipeById,
   updateRecipe,
   deleteRecipe
-} = require('../controllers/recipeController'); // Import controller functions
+} = require('../controllers/recipeController');
 
-// Recipe API routes
-router.get('/recipes', getAllRecipes);
-router.post('/recipes', createRecipe);
-router.get('/recipes/:id', getRecipeById);
-router.put('/recipes/:id', updateRecipe);
-router.delete('/recipes/:id', deleteRecipe);
+router.get('/', getAllRecipes);
+router.post('/', createRecipe);
+router.get('/:id', getRecipeById);
+router.put('/:id', updateRecipe);
+router.delete('/:id', deleteRecipe);
 
-// Additional API routes for external API calls
+// Endpoint to fetch a random meal from external API
 router.get('/random-meal', async (req, res) => {
   try {
+    // Make a request to TheMealDB API for a random meal
     const response = await axios.get('https://www.themealdb.com/api/json/v1/1/random.php');
+    
+    // Send the API response to the client
     res.json(response.data);
   } catch (error) {
+    // Handle errors and send an appropriate response
     console.error('Error fetching random meal:', error.message);
     res.status(500).json({ error: 'Failed to fetch random meal' });
-  }
-});
-
-router.get('/search-by-ingredient', async (req, res) => {
-  const ingredient = req.query.i;
-  if (!ingredient) {
-    return res.status(400).json({ error: 'Ingredient query parameter is required' });
-  }
-
-  try {
-    const response = await axios.get('https://www.themealdb.com/api/json/v1/1/filter.php', {
-      params: { i: ingredient }
-    });
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error searching meals by ingredient:', error.message);
-    res.status(500).json({ error: 'Failed to search meals by ingredient' });
   }
 });
 
