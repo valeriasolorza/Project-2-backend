@@ -1,12 +1,18 @@
-const app = require('./app'); // Import the app module
-const { connectDB } = require('./config/db'); // Update the path to point to the config folder
+const app = require('./app');
+const sequelize = require('./config/db');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
 
-// Connect to the database (if needed)
-connectDB();
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Start the server after ensuring database connection
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connection has been established successfully.');
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+    process.exit(1);
+  });
