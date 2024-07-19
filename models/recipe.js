@@ -17,3 +17,5 @@ const Recipe = sequelize.define('Recipe', {
 });
 
 module.exports = Recipe;
+
+// take the payload that it sends you and ask chatgbpt to create a table model using sequilize that matches this payload 
