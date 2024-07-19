@@ -2,19 +2,19 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
-// const {
-//   getAllRecipes,
-//   createRecipe,
-//   getRecipeById,
-//   updateRecipe,
-//   deleteRecipe
-// } = require('../controllers/recipeController');
+const {
+  getAllRecipes,
+  createRecipe,
+  getRecipeById,
+  updateRecipe,
+  deleteRecipe
+} = require('../controllers/recipeController');
 
-// router.get('/', getAllRecipes);
-// router.post('/', createRecipe);
-// router.get('/:id', getRecipeById);
-// router.put('/:id', updateRecipe);
-// router.delete('/:id', deleteRecipe);
+router.get('/', getAllRecipes);
+router.post('/', createRecipe);
+router.get('/:id', getRecipeById);
+router.put('/:id', updateRecipe);
+router.delete('/:id', deleteRecipe);
 
 
 // Existing routes

@@ -66,3 +66,6 @@ exports.deleteRecipe = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// Create a favorite recipe and make the button so that onclick runs a post function to my backend server and make the backend route 
+
