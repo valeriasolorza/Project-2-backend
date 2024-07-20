@@ -1,9 +1,9 @@
 const app = require('./app');
 const sequelize = require('./config/db');
+const router = require('./routes/recipeRoutes.js')
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
-const router = require('./routes/recipeRoutes.js')
 // Start the server after ensuring database connection
 sequelize.authenticate()
   .then(() => {
