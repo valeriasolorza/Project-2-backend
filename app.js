@@ -6,6 +6,6 @@ const recipeRoutes = require('./routes/recipeRoutes');
 app.use(express.json());
 
 // Routes
-app.use('/api/recipes', recipeRoutes);
+app.use('/recipes', recipeRoutes);
 
 module.exports = app;
