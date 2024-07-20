@@ -10,12 +10,12 @@ const {
   deleteRecipe
 } = require('../controllers/recipeController');
 
-// Routes for managing recipes
-router.get('/', getAllRecipes);
-router.post('/', createRecipe);
-router.get('/:id', getRecipeById);
-router.put('/:id', updateRecipe);
-router.delete('/:id', deleteRecipe);
+// // Routes for managing recipes
+// router.get('/', getAllRecipes);
+// router.post('/', createRecipe);
+// router.get('/:id', getRecipeById);
+// router.put('/:id', updateRecipe);
+// router.delete('/:id', deleteRecipe);
 
 // Function to list meals by first letter
 const listMealsByFirstLetter = async (letter) => {
