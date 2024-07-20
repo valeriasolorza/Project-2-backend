@@ -1,21 +1,43 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const sequelize = require('../config/database'); // Adjust the path to your Sequelize config file
 
 const Recipe = sequelize.define('Recipe', {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
+  recipeId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    allowNull: false,
   },
-  ingredients: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false
+  recipeName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  categoryId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   instructions: {
     type: DataTypes.TEXT,
-    allowNull: false
-  }
+    allowNull: false,
+  },
+  pictures: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  ytLink: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  ingredients: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  measurements: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  tableName: 'recipes',
+  timestamps: false,
 });
 
 module.exports = Recipe;
-
-// take the payload that it sends you and ask chatgbpt to create a table model using sequilize that matches this payload 
