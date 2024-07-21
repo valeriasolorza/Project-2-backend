@@ -38,11 +38,11 @@ const listMealAreas = async () => {
 };
 
 (async () => {
-    await Recipe.sync();
     await Category.sync();
     await Area.sync();
-    await Favorite.sync();
+    await Recipe.sync();
     await User.sync();
+    await Favorite.sync();
 
     try {
         const categories_data = await listMealCategories();
