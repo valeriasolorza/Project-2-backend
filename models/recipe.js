@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db.js'); // Adjust the path to your Sequelize config file
+const sequelize = require('../config/db.js');
+const Area = require('./Area.js');
+const Category = require('./Category.js');
 
 const Recipe = sequelize.define('Recipe', {
   recipeId: {
@@ -13,13 +15,25 @@ const Recipe = sequelize.define('Recipe', {
   },
   categoryId: {
     type: DataTypes.INTEGER,
+    references: {
+      model: 'categories',
+      key: 'categoryId'
+    },
+    allowNull: false,
+  },
+  areaId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'areas',
+      key: 'areaId'
+    },
     allowNull: false,
   },
   instructions: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  pictures: {
+  picture: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -28,16 +42,26 @@ const Recipe = sequelize.define('Recipe', {
     allowNull: false,
   },
   ingredients: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false,
   },
   measurements: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false,
   },
 }, {
   tableName: 'recipes',
   timestamps: false,
+});
+
+Recipe.belongsTo(Area, {
+  foreignKey: 'areaId',
+  as: 'area',
+});
+
+Recipe.belongsTo(Category, {
+  foreignKey: 'categoryId',
+  as: 'category',
 });
 
 module.exports = Recipe;
