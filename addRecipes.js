@@ -2,8 +2,16 @@ const axios = require('axios');
 const Recipe = require('./models/Recipe');
 const Category = require('./models/Category');
 const Area = require('./models/Area');
+const Favorite = require('./models/Favorite');
+const User = require('./models/User');
 
 const letters = 'abcdefghijklmnopqrstuvwxyz';
+
+Recipe.sync();
+Category.sync();
+Area.sync();
+Favorite.sync();
+User.sync();
 
 const listMealsByFirstLetter = async (letter) => {
     try {
