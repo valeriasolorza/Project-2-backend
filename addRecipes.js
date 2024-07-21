@@ -7,12 +7,6 @@ const User = require('./models/User');
 
 const letters = 'abcdefghijklmnopqrstuvwxyz';
 
-Recipe.sync();
-Category.sync();
-Area.sync();
-Favorite.sync();
-User.sync();
-
 const listMealsByFirstLetter = async (letter) => {
     try {
       const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?f=${letter}`);
@@ -44,6 +38,12 @@ const listMealAreas = async () => {
 };
 
 (async () => {
+    await Recipe.sync();
+    await Category.sync();
+    await Area.sync();
+    await Favorite.sync();
+    await User.sync();
+
     try {
         const categories_data = await listMealCategories();
         const categories = categories_data.categories;
