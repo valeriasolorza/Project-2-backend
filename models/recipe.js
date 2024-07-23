@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.js');
 const Area = require('./Area.js');
 const Category = require('./Category.js');
+const Favorite = require('./Favorite.js');
 
 const Recipe = sequelize.define('Recipe', {
   recipeId: {
@@ -62,6 +63,11 @@ Recipe.belongsTo(Area, {
 Recipe.belongsTo(Category, {
   foreignKey: 'categoryId',
   as: 'category',
+});
+
+Recipe.hasMany(Favorite, {
+  foreignKey: 'recipeId',
+  as: 'favorites',
 });
 
 module.exports = Recipe;

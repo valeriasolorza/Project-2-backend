@@ -1,8 +1,6 @@
 const express = require('express');
-const axios = require('axios');
 const router = express.Router();
 const Favorite = require('../models/Favorite');
-const User = require('../models/User');
 
 const {
   getRandomRecipe,
