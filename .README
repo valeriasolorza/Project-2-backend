@@ -1,43 +1,13 @@
-# Project 2 Backend
+Project 2 Backend
 
-## Table of Contents
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Setup Instructions](#setup-instructions)
-- [Environment Variables](#environment-variables)
-- [Database Migrations](#database-migrations)
-- [API Endpoints](#api-endpoints)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
-## Project Overview
+Project Overview
 This project is a backend server for managing recipes and favorite recipes. It provides a RESTful API for creating, reading, updating, and deleting recipes. Additionally, users can mark recipes as favorites and retrieve random meals from an external API.
 
-## Features
+Features
 - Create, read, update, and delete recipes.
 - Mark recipes as favorites.
 - Fetch a random meal from an external API.
 - List meals by first letter.
 - List meal categories.
 
-## Technologies Used
-- Node.js
-- Express.js
-- Sequelize ORM
-- PostgreSQL
-- Axios
-- Dotenv
-
-## Setup Instructions
-
-### Prerequisites
-- Node.js (v16.18.1 or later)
-- PostgreSQL database
-
-### Installation
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/valeriasolorza/Project-2-backend.git
-   cd Project-2-backend
