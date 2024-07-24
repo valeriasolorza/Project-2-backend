@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const { PRODUCTION } = require('../config/db');
 const User = require('../models/User');
 const Session = require('../models/Session');
 const Favorite = require('../models/Favorite');
@@ -9,16 +8,16 @@ const saltRounds = 10;
 
 const validateEmail = (email) => {
     return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
 };
 
 function generateToken(n) {
     var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     var token = '';
-    for(var i = 0; i < n; i++) {
+    for (var i = 0; i < n; i++) {
         token += chars[Math.floor(Math.random() * chars.length)];
     }
     return token;
@@ -36,7 +35,7 @@ async function validateToken(token) {
     if (!token) {
         return false;
     }
-    if(!token.startsWith('Bearer ')) {
+    if (!token.startsWith('Bearer ')) {
         return false;
     }
     var stripToken = token.replace('Bearer ', '');
@@ -57,24 +56,21 @@ async function validateToken(token) {
 exports.validateToken = validateToken;
 
 exports.signUp = async (req, res) => {
-    if(!PRODUCTION) {
-        res.set('Access-Control-Allow-Origin', '*');
-    }
     const { email, username, password } = req.body;
     try {
-        if(!email || !username || !password) {
+        if (!email || !username || !password) {
             return res.status(400).json({ message: 'Please fill in all fields.' });
         }
-        if(!validateEmail(email)) {
+        if (!validateEmail(email)) {
             return res.status(400).json({ message: 'Invalid email address.' });
         }
-        if(username.length < 3) {
+        if (username.length < 3) {
             return res.status(400).json({ message: 'Username must be at least 3 characters long.' });
         }
-        if(username.length > 10) {
+        if (username.length > 10) {
             return res.status(400).json({ message: 'Username must be at most 10 characters long.' });
         }
-        if(password.length < 6) {
+        if (password.length < 6) {
             return res.status(400).json({ message: 'Password must be at least 6 characters long.' });
         }
         const userExists = await User.findOne({ where: { username: username } });
@@ -88,7 +84,7 @@ exports.signUp = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const user = await User.create({ email, username, password: hashedPassword });
         const { access_token, access_expiration, refresh_token, refresh_expiration } = generateTokens();
-        await Session.create({ userId: user.id, token: access_token, expiration: access_expiration, refreshToken: refresh_token, refreshExpiration: refresh_expiration});
+        await Session.create({ userId: user.userId, token: access_token, expiration: access_expiration, refreshToken: refresh_token, refreshExpiration: refresh_expiration });
         res.status(200).json({ success: true, message: 'Successfully signed up', access_token: access_token, access_expiration: access_expiration, refresh_token: refresh_token, refresh_expiration: refresh_expiration, userId: user.userId });
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -96,12 +92,9 @@ exports.signUp = async (req, res) => {
 };
 
 exports.signIn = async (req, res) => {
-    if(!PRODUCTION) {
-        res.set('Access-Control-Allow-Origin', '*');
-    }
     const { username, password } = req.body;
     try {
-        if(!username || !password) {
+        if (!username || !password) {
             return res.status(400).json({ message: 'Please fill in all fields.' });
         }
         const user = await User.findOne({ where: { username: username } });
@@ -113,7 +106,7 @@ exports.signIn = async (req, res) => {
             return res.status(400).json({ message: 'Incorrect password.' });
         }
         const { access_token, access_expiration, refresh_token, refresh_expiration } = generateTokens();
-        await Session.create({ userId: user.userId, token: access_token, expiration: access_expiration, refreshToken: refresh_token, refreshExpiration: refresh_expiration});
+        await Session.create({ userId: user.userId, token: access_token, expiration: access_expiration, refreshToken: refresh_token, refreshExpiration: refresh_expiration });
         res.status(200).json({ success: true, message: 'Successfully signed in', access_token: access_token, access_expiration: access_expiration, refresh_token: refresh_token, refresh_expiration: refresh_expiration, userId: user.userId });
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -121,13 +114,10 @@ exports.signIn = async (req, res) => {
 }
 
 exports.signOut = async (req, res) => {
-    if(!PRODUCTION) {
-        res.set('Access-Control-Allow-Origin', '*');
-    }
     const token = req.headers.authorization;
     try {
         const session = await validateToken(token);
-        if(!session) {
+        if (!session) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
         await Session.destroy({
@@ -142,13 +132,10 @@ exports.signOut = async (req, res) => {
 }
 
 exports.refreshToken = async (req, res) => {
-    if(!PRODUCTION) {
-        res.set('Access-Control-Allow-Origin', '*');
-    }
     const { refresh_token } = req.body;
     try {
         const date = new Date();
-        if(!refresh_token) {
+        if (!refresh_token) {
             return res.status(400);
         }
         const session = await Session.findOne({
@@ -157,9 +144,9 @@ exports.refreshToken = async (req, res) => {
             },
             include: [
                 {
-                  model: User,
-                  as: 'user',
-                  attributes: ['userId'],
+                    model: User,
+                    as: 'user',
+                    attributes: ['userId'],
                 }
             ]
         });
@@ -181,12 +168,9 @@ exports.refreshToken = async (req, res) => {
 }
 
 exports.favorite = async (req, res) => {
-    if(!PRODUCTION) {
-        res.set('Access-Control-Allow-Origin', '*');
-    }
     const token = req.headers.authorization;
     const session = await validateToken(token);
-    if(!session) {
+    if (!session) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
     const userId = session.userId;
@@ -217,12 +201,9 @@ exports.favorite = async (req, res) => {
 }
 
 exports.getFavorites = async (req, res) => {
-    if(!PRODUCTION) {
-        res.set('Access-Control-Allow-Origin', '*');
-    }
     const token = req.headers.authorization;
     const session = await validateToken(token);
-    if(!session) {
+    if (!session) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
     const userId = session.userId;

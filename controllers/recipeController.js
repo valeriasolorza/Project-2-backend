@@ -1,14 +1,10 @@
 const Recipe = require('../models/Recipe');
 const Area = require('../models/Area');
 const Category = require('../models/Category');
-const { PRODUCTION } = require('../config/db');
 const sequelize = require('sequelize');
 const { validateToken } = require('./accountController');
 
 exports.getAllRecipes = async (req, res) => {
-  if(!PRODUCTION) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
   try {
     const recipes = await Recipe.findAll();
     res.json(recipes);
@@ -18,9 +14,6 @@ exports.getAllRecipes = async (req, res) => {
 };
 
 exports.createRecipe = async (req, res) => {
-  if(!PRODUCTION) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
   const { name, ingredients, instructions } = req.body;
   try {
     const newRecipe = await Recipe.create({ name, ingredients, instructions });
@@ -31,17 +24,14 @@ exports.createRecipe = async (req, res) => {
 };
 
 exports.getRecipeById = async (req, res) => {
-  if(!PRODUCTION) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
   const { id } = req.params;
   const token = req.headers.authorization;
   const session = await validateToken(token);
-  if(!session) {
+  if (!session) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
   try {
-    const recipe = await Recipe.findByPk(id, 
+    const recipe = await Recipe.findByPk(id,
       {
         attributes: {
           include: [
@@ -62,7 +52,7 @@ exports.getRecipeById = async (req, res) => {
       }
     );
     if (recipe) {
-      if(recipe.favorite !== null) {
+      if (recipe.favorite !== null) {
         recipe.isFavorite = true;
       }
       res.json(recipe);
@@ -75,9 +65,6 @@ exports.getRecipeById = async (req, res) => {
 };
 
 exports.updateRecipe = async (req, res) => {
-  if(!PRODUCTION) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
   const { id } = req.params;
   const { name, ingredients, instructions } = req.body;
   try {
@@ -97,11 +84,8 @@ exports.updateRecipe = async (req, res) => {
 };
 
 exports.getSearchRecipes = async (req, res) => {
-  if(!PRODUCTION) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
   const { s } = req.query;
-  if(!s || /^\d+$/.test(s)) {
+  if (!s || /^\d+$/.test(s)) {
     res.status(400).json({ message: 'Invalid search query' });
     return;
   }
@@ -134,9 +118,6 @@ exports.getSearchRecipes = async (req, res) => {
 };
 
 exports.deleteRecipe = async (req, res) => {
-  if(!PRODUCTION) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
   const { id } = req.params;
   try {
     const recipe = await Recipe.findByPk(id);
@@ -152,11 +133,8 @@ exports.deleteRecipe = async (req, res) => {
 };
 
 exports.getRandomRecipe = async (req, res) => {
-  if(!PRODUCTION) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
   try {
-    const recipe = await Recipe.findOne({ 
+    const recipe = await Recipe.findOne({
       order: sequelize.literal('random()'),
       include: [
         {
@@ -182,11 +160,8 @@ exports.getRandomRecipe = async (req, res) => {
 };
 
 exports.getRecipesByFirstLetter = async (req, res) => {
-  if(!PRODUCTION) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
   const { letter } = req.params;
-  if (!letter || /^\d+$/.test(letter) || letter.length > 1 ) {
+  if (!letter || /^\d+$/.test(letter) || letter.length > 1) {
     res.status(400).json({ message: 'Invalid letter' });
     return;
   }
@@ -215,9 +190,6 @@ exports.getRecipesByFirstLetter = async (req, res) => {
 };
 
 exports.getRecipeCategories = async (req, res) => {
-  if(!PRODUCTION) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
   try {
     const categories = await Category.findAll();
     res.json(categories);

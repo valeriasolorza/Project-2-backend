@@ -11,7 +11,5 @@ const sequelize = new Sequelize({
   logging: false,
 });
 
-const PRODUCTION = process.env.PRODUCTION == true ?? false;
-
-module.exports = sequelize, PRODUCTION;
+module.exports = sequelize;
 

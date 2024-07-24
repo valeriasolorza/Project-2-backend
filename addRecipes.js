@@ -4,6 +4,7 @@ const Category = require('./models/Category');
 const Area = require('./models/Area');
 const Favorite = require('./models/Favorite');
 const User = require('./models/User');
+const Session = require('./models/Session');
 
 const letters = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -43,6 +44,7 @@ const listMealAreas = async () => {
     await Recipe.sync();
     await User.sync();
     await Favorite.sync();
+    await Session.sync();
 
     try {
         const categories_data = await listMealCategories();
