@@ -29,12 +29,5 @@ const Favorite = sequelize.define('Favorite', {
   timestamps: false,
 });
 
-// Favorite.belongsTo(User, {
-//   foreignKey: 'userId',
-// });
-
-// Favorite.belongsTo(Recipe, {
-//   foreignKey: 'recipeId',
-// });
 
 module.exports = Favorite;
